@@ -21,5 +21,10 @@ namespace LMS.Models
         public bool IsFellowship { get; set; }
 
         public string Visits { get; set; }
+
+        public string Instructors { get; set; }
+
+        // Many-to-Many Relationship
+        public List<Enrollment> Enrollments { get; set; }
     }
 }

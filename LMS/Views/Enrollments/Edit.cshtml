@@ -1,0 +1,34 @@
+﻿@model LMS.Models.Course
+
+@{
+	ViewData["Title"] = "Edit Enrollment";
+}
+
+<h2>Edit Enrollment</h2>
+
+<form method="post">
+	<input type="hidden" asp-for="Id">
+
+	<div class="mb-3">
+		<label class="form-label">Course Name</label>
+		<input type="text" class="form-control" asp-for="Name" readonly>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Country</label>
+		<input type="text" class="form-control" asp-for="Country" readonly>
+	</div>
+
+	<div class="mb-3">
+		<label class="form-label">Enroll Students</label>
+		<select name="selectedStudents" class="form-control" multiple>
+			@foreach (var student in (MultiSelectList)ViewBag.Students)
+			{
+				<option value="@student.Value">@student.Text</option>
+			}
+		</select>
+	</div>
+
+	<button type="submit" class="btn btn-success">Save</button>
+	<a href="/Enrollments" class="btn btn-secondary">Cancel</a>
+</form>

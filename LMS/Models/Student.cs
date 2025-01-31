@@ -20,7 +20,9 @@ namespace LMS.Models
         [MaxLength(100)]
         public string Department { get; set; }
 
+        // Many-to-Many Relationship
+        public List<Enrollment> Enrollments { get; set; }
         // Navigation property
-        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        // public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }
