@@ -1,4 +1,4 @@
-# LMS_ASPCoreMVC
+
 # 📚 Learning Management System (LMS)
 
 ## 📖 Description

@@ -54,14 +54,29 @@ namespace LMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Country,StartDate,EndDate,IsFellowship,Visits")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Name,Country,StartDate,EndDate,IsFellowship,Visits,Instructors")] Course course)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+
+            // Manually validate Course.Name
+            if (string.IsNullOrEmpty(course.Name))
             {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Add error to ModelState for Name field
+                ModelState.AddModelError("Name", "Course name is required.");
             }
+
+            // If validation fails, return the view with the error
+            if (!ModelState.IsValid)
+            {
+                return View(course);
+            }
+
+            // if (ModelState.IsValid)
+            // {
+            _context.Add(course);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            // }
             return View(course);
         }
 
@@ -86,33 +101,46 @@ namespace LMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,StartDate,EndDate,IsFellowship,Visits")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Country,StartDate,EndDate,IsFellowship,Visits,Instructors")] Course course)
         {
             if (id != course.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            // Manually validate Course.Name
+            if (string.IsNullOrEmpty(course.Name))
             {
-                try
-                {
-                    _context.Update(course);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CourseExists(course.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                // Add error to ModelState for Name field
+                ModelState.AddModelError("Name", "Course name is required.");
             }
+            // If validation fails, return the view with the error
+            if (!ModelState.IsValid)
+            {
+                return View(course);
+            }
+
+            // if (ModelState.IsValid)
+            // {
+            try
+            {
+                _context.Update(course);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CourseExists(course.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+            // }
             return View(course);
         }
 

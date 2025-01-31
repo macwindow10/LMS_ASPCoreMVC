@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Models
 {
@@ -25,6 +26,7 @@ namespace LMS.Models
         public string Instructors { get; set; }
 
         // Many-to-Many Relationship
+        [BindNever] // Prevents ModelState validation on this property
         public List<Enrollment> Enrollments { get; set; }
     }
 }
