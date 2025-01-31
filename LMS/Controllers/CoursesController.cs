@@ -57,14 +57,12 @@ namespace LMS.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Country,StartDate,EndDate,IsFellowship,Visits,Instructors")] Course course)
         {
             ModelState.Clear();
-
             // Manually validate Course.Name
             if (string.IsNullOrEmpty(course.Name))
             {
                 // Add error to ModelState for Name field
                 ModelState.AddModelError("Name", "Course name is required.");
             }
-
             // If validation fails, return the view with the error
             if (!ModelState.IsValid)
             {

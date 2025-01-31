@@ -10,6 +10,8 @@ namespace LMS.Models
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
+        
+        public string Photo { get; set; }
 
         [MaxLength(15)]
         public string Contact { get; set; }

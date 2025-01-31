@@ -13,10 +13,12 @@ namespace LMS.Controllers
     public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public StudentsController(ApplicationDbContext context)
+        public StudentsController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Students
@@ -54,14 +56,53 @@ namespace LMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Contact,Country,Department")] Student student)
+        public async Task<IActionResult> Create([Bind("Id,Name,Contact,Country,Department")] Student student, IFormFile photo)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            // Manually validate student.Name
+            if (string.IsNullOrEmpty(student.Name))
             {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Add error to ModelState for Name field
+                ModelState.AddModelError("Name", "Student name is required.");
             }
+            // If validation fails, return the view with the error
+            if (!ModelState.IsValid)
+            {
+                return View(student);
+            }
+
+            // if (ModelState.IsValid)
+            // {
+            // Handle file upload
+            if (photo != null && photo.Length > 0)
+            {
+                // Define the folder path to save the photo
+                string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+
+                // Create the folder if it doesn't exist
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // Generate a unique file name to avoid name conflicts
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(photo.FileName);
+                string filePath = Path.Combine(uploadsFolder, fileName);
+
+                // Save the uploaded photo to the folder
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await photo.CopyToAsync(fileStream);
+                }
+
+                // Store the file path in the Student model
+                student.Photo = fileName;
+            }
+
+            _context.Add(student);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            // }
             return View(student);
         }
 

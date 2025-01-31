@@ -10,8 +10,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!-- Add file input for photo -->
+            <div class="mb-3">
+                <label class="form-label">Upload Photo</label>
+                <input type="file" class="form-control" name="Photo" />
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
