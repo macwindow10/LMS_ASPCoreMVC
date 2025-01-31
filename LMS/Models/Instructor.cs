@@ -11,7 +11,7 @@ namespace LMS.Models
         [MaxLength(100)]
         public string Name { get; set; }
 
-        public int CoursesAttended { get; set; }
+        public string CoursesAttended { get; set; }
 
         [MaxLength(100)]
         public string AreaOfExpertise { get; set; }

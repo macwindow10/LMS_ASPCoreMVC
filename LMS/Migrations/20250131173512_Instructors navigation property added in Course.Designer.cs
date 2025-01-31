@@ -4,6 +4,7 @@ using LMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250131173512_Instructors navigation property added in Course")]
+    partial class InstructorsnavigationpropertyaddedinCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,6 +97,9 @@ namespace LMS.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("CourseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CoursesAttended")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -107,6 +113,8 @@ namespace LMS.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Instructors");
                 });
@@ -161,6 +169,18 @@ namespace LMS.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LMS.Models.Instructor", b =>
+                {
+                    b.HasOne("LMS.Models.Course", null)
+                        .WithMany("Instructors")
+                        .HasForeignKey("CourseId");
+                });
+
+            modelBuilder.Entity("LMS.Models.Course", b =>
+                {
+                    b.Navigation("Instructors");
                 });
 
             modelBuilder.Entity("LMS.Models.Student", b =>

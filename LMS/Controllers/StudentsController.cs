@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Models;
+using LMS.Data;
 
-namespace LMS.Data
+namespace LMS.Controllers
 {
     public class StudentsController : Controller
     {

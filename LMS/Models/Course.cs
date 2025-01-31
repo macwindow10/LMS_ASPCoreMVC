@@ -18,6 +18,8 @@ namespace LMS.Models
 
         public DateTime EndDate { get; set; }
 
-        public int Visits { get; set; }
+        public bool IsFellowship { get; set; }
+
+        public string Visits { get; set; }
     }
 }
